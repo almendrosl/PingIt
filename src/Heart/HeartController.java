@@ -14,13 +14,17 @@ public class HeartController implements ControllerInterface {
         view.createControls();
 		view.disableStopMenuItem();
 		view.disableStartMenuItem();
+		model.notifyInstanciasObservers();
 	}
   
 	public void start() {}
  
 	public void stop() {}
     
-	public void increaseBPM() {}
+	public void increaseBPM() {
+		HeartModel heartModel = HeartModel.getInstance();
+		model.notifyInstanciasObservers();
+	}
     
 	public void decreaseBPM() {}
   

@@ -5,6 +5,8 @@ import Beat.BeatObserver;
 
 public interface HeartModelInterface {
 	int getHeartRate();
+	int getNumeroInstancias();
+	void notifyInstanciasObservers();
 	void registerObserver(BeatObserver o);
 	void removeObserver(BeatObserver o);
 	void registerObserver(BPMObserver o);
