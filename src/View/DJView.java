@@ -2,7 +2,9 @@ package View;
     
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
+
 import Beat.*;
 import ControllerInterface.ControllerInterface;
 

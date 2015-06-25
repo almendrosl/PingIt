@@ -1,4 +1,4 @@
-package Beat;
+package View;
   
 import java.awt.*;
 import java.awt.event.*;
