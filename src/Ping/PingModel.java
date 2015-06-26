@@ -1,7 +1,17 @@
 package Ping;
 
 import java.io.*;
+import java.awt.event.*; // Para el manejo de eventos, necesario para el Timer.
+
+import javax.swing.Timer;
+
+import Beat.BPMObserver;
+import Beat.BeatObserver;
+
+import java.io.InputStreamReader;
+import java.io.IOException;
 import java.util.*;
+import java.io.BufferedReader;
 
 public class PingModel {
 	
@@ -9,29 +19,106 @@ public class PingModel {
 	String tms; //tiempo de respuesta
 	int pingMedio;
 	int suma;
-	//int frec;
+	int frecDefecto = 4000;
 	int env, rec, per; // estados
-	boolean noRespuesta = true;
-	boolean pingIncorrecto = true;
+	boolean noRespuesta;
+	boolean pingIncorrecto;
+	Timer time;
+	String ip;
+	int frec = 0;
+	ArrayList beatObservers = new ArrayList();
+	ArrayList bpmObservers = new ArrayList();
 	
 	public PingModel(){
 		
 	}
+
+//-------------------------------------------------------------------------------------------------------
+//FUNCIONES QUE CORRESPONDEN AL PUNTO 2
+//-------------------------------------------------------------------------------------------------------
 	
-	void Start(String ip, int frec){
-		
-		
+	void onCycle(){
+		env = 0;				//Cada ciclo nuevo estos valores se reinicializan
+		rec = 0;
+		per = 0;
+		suma = 0;
+		env = 0;
+		pingIncorrecto = false;
+		noRespuesta = false;
+		if (frec == 0){
+			
+			time = new Timer(frecDefecto,new ActionListener(){
+				public void actionPerformed (ActionEvent evn){
+					doCommand();
+				}
+			});
+		}
+		else
+		{
+			time.setDelay(frec);
+		}
+		time.start();
 	}
-	String getCommand(String ip){
+	
+	void offCycle(){
+		time.stop();	
+	}
+	
+	void setURL(String ip){
+		this.ip = ip;
+		doCommand();
+	}
+	
+	String getPing(){
+		return tms;
+	}
+	
+	//NOT SURE ABOUT THIS PART
+	public void registerObserver(BeatObserver o) {
+		beatObservers.add(o);
+	}
+  
+	public void notifyBeatObservers() {
+		for(int i = 0; i < beatObservers.size(); i++) {
+			BeatObserver observer = (BeatObserver)beatObservers.get(i);
+			observer.updateBeat();
+		}
+	}
+  
+	public void registerObserver(BPMObserver o) {
+		bpmObservers.add(o);
+	}
+  
+	public void notifyBPMObservers() {
+		for(int i = 0; i < bpmObservers.size(); i++) {
+			BPMObserver observer = (BPMObserver)bpmObservers.get(i);
+			observer.updateBPM();
+		}
+	}
+	
+//-------------------------------------------------------------------------------------------------------
+//FUNCIONES PARA LA NUEVA VISTA
+//-------------------------------------------------------------------------------------------------------
+
+	
+	void setFrec(int frec){
+		this.frec = frec;
+	}
+	
+//-------------------------------------------------------------------------------------------------------
+//FUNCIONES NECESARIAS PARA REALIZAR LOS COMANDOS DE PING DE WINDOWS
+//-------------------------------------------------------------------------------------------------------
+
+	String getCommand(){
 		
 		command = "ping -n 1 " + ip;
 		
 		return command;
 	}
 	
-	void doCommand(String ip){
+	void doCommand(){
 		
-		command = getCommand(ip);
+		command = getCommand();
 		 try
 	        {
 	            Runtime r = Runtime.getRuntime();
