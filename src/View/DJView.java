@@ -39,13 +39,28 @@ public class DJView implements ActionListener,  BeatObserver, BPMObserver {
         viewPanel = new JPanel(new GridLayout(1, 2));
         viewFrame = new JFrame("View");
         viewFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        viewFrame.setSize(new Dimension(100, 80));
+        viewFrame.setSize(new Dimension(150, 100));
         bpmOutputLabel = new JLabel("offline", SwingConstants.CENTER);
 		beatBar = new BeatBar();
 		beatBar.setValue(0);
-        JPanel bpmPanel = new JPanel(new GridLayout(2, 1));
-		bpmPanel.add(beatBar);
+		JLabel ipURLOputLabel = new JLabel("IP", SwingConstants.CENTER);
+        JPanel bpmPanel = new JPanel(new GridLayout(4, 1));
+        JPanel estadisticas = new JPanel(new GridLayout(1, 5));
+        bpmPanel.add(ipURLOputLabel);
+        //bpmPanel.add(new JSeparator(SwingConstants.HORIZONTAL));
         bpmPanel.add(bpmOutputLabel);
+        bpmPanel.add(beatBar);
+        bpmPanel.add(estadisticas);
+        
+        JLabel pingSegOputLabel = new JLabel("Ping por Segundo ", SwingConstants.CENTER);
+        JLabel FRPputLabel = new JLabel("F/R/P", SwingConstants.CENTER);
+        JLabel pingMedioputLabel = new JLabel("Ping medio", SwingConstants.CENTER);
+        estadisticas.add(pingSegOputLabel);
+        //bpmPanel.add(new JSeparator(SwingConstants.VERTICAL));
+        estadisticas.add(FRPputLabel);
+        //bpmPanel.add(new JSeparator(SwingConstants.VERTICAL));
+        estadisticas.add(pingMedioputLabel);
+        
         viewPanel.add(bpmPanel);
         viewFrame.getContentPane().add(viewPanel, BorderLayout.CENTER);
         viewFrame.pack();
@@ -90,7 +105,9 @@ public class DJView implements ActionListener,  BeatObserver, BPMObserver {
         controlFrame.setJMenuBar(menuBar);
 
         bpmTextField = new JTextField(2);
-        bpmLabel = new JLabel("Enter BPM:", SwingConstants.RIGHT);
+        JTextField pingSegTextField = new JTextField(2);
+        bpmLabel = new JLabel("Enter URL/IP:", SwingConstants.RIGHT);
+        JLabel pingsSeg = new JLabel("Enter Pings por Seg:",SwingConstants.RIGHT);
         setBPMButton = new JButton("Set");
         setBPMButton.setSize(new Dimension(10,40));
         increaseBPMButton = new JButton(">>");
@@ -104,9 +121,12 @@ public class DJView implements ActionListener,  BeatObserver, BPMObserver {
 		buttonPanel.add(decreaseBPMButton);
 		buttonPanel.add(increaseBPMButton);
 
-        JPanel enterPanel = new JPanel(new GridLayout(1, 2));
+        JPanel enterPanel = new JPanel(new GridLayout(2, 2));
         enterPanel.add(bpmLabel);
         enterPanel.add(bpmTextField);
+        enterPanel.add(pingsSeg);
+        enterPanel.add(pingSegTextField);
+        
         JPanel insideControlPanel = new JPanel(new GridLayout(3, 1));
         insideControlPanel.add(enterPanel);
         insideControlPanel.add(setBPMButton);
@@ -159,7 +179,7 @@ public class DJView implements ActionListener,  BeatObserver, BPMObserver {
 				}
 			} else {
 				if (bpmOutputLabel != null) {
-        			bpmOutputLabel.setText("" + model.getBPM());
+        			bpmOutputLabel.setText("Current BPM: " + model.getBPM());
 				}
 			}
 		}
