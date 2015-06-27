@@ -31,4 +31,8 @@ public interface PingModelInterface {
 	
 	void setFrec(int frec);
 	
+	int getFrec();
+	
+	String getPing2();
+	
 }

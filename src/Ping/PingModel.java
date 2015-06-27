@@ -45,15 +45,12 @@ public class PingModel implements PingModelInterface{
 			env = 0;
 			pingIncorrecto = false;
 			noRespuesta = false;
-			if (frec == 0){
-				time = new Timer(frecDefecto,new ActionListener(){
-					public void actionPerformed (ActionEvent evn){
-						doCommand();
-					}
-				});
-			}
-			else
-			{
+			time = new Timer(frecDefecto,new ActionListener(){
+				public void actionPerformed (ActionEvent evn){
+					doCommand();
+				}
+			});
+			if (frec != 0){
 				time.setDelay(frec);
 			}
 			time.start();
@@ -61,12 +58,6 @@ public class PingModel implements PingModelInterface{
 	
 	public void offCycle(){
 		time.stop();
-	
-	}
-	
-	public void setURL(String ip){
-		this.ip = ip;
-		doCommand();
 	}
 	
 	public int getPing(){
@@ -96,14 +87,59 @@ public class PingModel implements PingModelInterface{
 		}
 	}
 	
+	public void setFrec(int frec){
+		this.frec = frec;
+		time.setDelay(frec);
+		doCommand();
+	}
+	
+	public int getFrec(){
+		return frec;
+	}
+	
+
+	
 //-------------------------------------------------------------------------------------------------------
 //FUNCIONES PARA LA NUEVA VISTA
 //-------------------------------------------------------------------------------------------------------
 
 	
-	public void setFrec(int frec){
+	public void setURL(String ip){
+		this.ip = ip;
 		this.frec = frec;
 		doCommand();
+	}
+	
+	public String getURL(){
+		return ip;
+	}
+	
+	public int getPingMedio(){
+		return pingMedio;
+	}
+	public int getEnviados(){
+		return env;
+	}
+	
+	public int getRecibidos(){
+		return rec;
+	}
+	
+	public int getPerdidos(){
+		return per;
+	}
+	
+	public String getPing2(){
+		if (noRespuesta){
+			return "Timed Out";
+		}
+		
+		if (pingIncorrecto){
+			return "IP incorrecta";
+		}
+		
+		else
+			return tms;
 	}
 	
 //-------------------------------------------------------------------------------------------------------
@@ -147,7 +183,7 @@ public class PingModel implements PingModelInterface{
 	
 	public void parsing(String line){
 		
-		String comienzo1 = "Respuesta desde"; //espa�ol
+		String comienzo1 = "Respuesta desde"; //espanol
 		String beginning1 = "Reply from"; //ingles
 		String comienzo2 = "Tiempo de respuesta agotado";
 		String beginning2 = "Request timed out";
