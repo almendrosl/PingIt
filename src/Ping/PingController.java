@@ -29,16 +29,16 @@ public class PingController implements ControllerInterface {
 	}
     
 	public void increaseBPM() {
-        int bpm = model.getBPM();
-        model.setBPM(bpm + 1);
+//        int bpm = model.getBPM();
+//        model.setBPM(bpm + 1);
 	}
     
 	public void decreaseBPM() {
-        int bpm = model.getBPM();
-        model.setBPM(bpm - 1);
+//        int bpm = model.getBPM();
+//        model.setBPM(bpm - 1);
   	}
   
  	public void setBPM(int bpm) {
-		model.setBPM(bpm);
+		model.setFrec(bpm);
 	}
 }

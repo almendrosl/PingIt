@@ -26,8 +26,8 @@ public class PingAdapter implements BeatModelInterface {
 		return ping.getPing();
 	}
   
-    public void setBPM(String ip) {
-    	ping.setURL(ip);
+    public void setBPM(int frec) {
+    	ping.setFrec(frec);
     }
    
 	public void registerObserver(BeatObserver o) {

@@ -13,18 +13,18 @@ import java.io.IOException;
 import java.util.*;
 import java.io.BufferedReader;
 
-public class PingModel {
+public class PingModel implements PingModelInterface{
 	
 	String command;
 	String tms; //tiempo de respuesta
-	int pingMedio;
+	int ping, pingMedio;
 	int suma;
-	int frecDefecto = 4000;
+	int frecDefecto = 1000;
 	int env, rec, per; // estados
 	boolean noRespuesta;
 	boolean pingIncorrecto;
 	Timer time;
-	String ip;
+	String ip = "www.google.com";
 	int frec = 0;
 	ArrayList beatObservers = new ArrayList();
 	ArrayList bpmObservers = new ArrayList();
@@ -37,40 +37,40 @@ public class PingModel {
 //FUNCIONES QUE CORRESPONDEN AL PUNTO 2
 //-------------------------------------------------------------------------------------------------------
 	
-	void onCycle(){
-		env = 0;				//Cada ciclo nuevo estos valores se reinicializan
-		rec = 0;
-		per = 0;
-		suma = 0;
-		env = 0;
-		pingIncorrecto = false;
-		noRespuesta = false;
-		if (frec == 0){
-			
-			time = new Timer(frecDefecto,new ActionListener(){
-				public void actionPerformed (ActionEvent evn){
-					doCommand();
-				}
-			});
-		}
-		else
-		{
-			time.setDelay(frec);
-		}
-		time.start();
+	public void onCycle(){
+			env = 0;				//Cada ciclo nuevo estos valores se reinicializan
+			rec = 0;
+			per = 0;
+			suma = 0;
+			env = 0;
+			pingIncorrecto = false;
+			noRespuesta = false;
+			if (frec == 0){
+				time = new Timer(frecDefecto,new ActionListener(){
+					public void actionPerformed (ActionEvent evn){
+						doCommand();
+					}
+				});
+			}
+			else
+			{
+				time.setDelay(frec);
+			}
+			time.start();
 	}
 	
-	void offCycle(){
-		time.stop();	
+	public void offCycle(){
+		time.stop();
+	
 	}
 	
-	void setURL(String ip){
+	public void setURL(String ip){
 		this.ip = ip;
 		doCommand();
 	}
 	
-	String getPing(){
-		return tms;
+	public int getPing(){
+		return ping;
 	}
 	
 	//NOT SURE ABOUT THIS PART
@@ -101,29 +101,30 @@ public class PingModel {
 //-------------------------------------------------------------------------------------------------------
 
 	
-	void setFrec(int frec){
+	public void setFrec(int frec){
 		this.frec = frec;
+		doCommand();
 	}
 	
 //-------------------------------------------------------------------------------------------------------
 //FUNCIONES NECESARIAS PARA REALIZAR LOS COMANDOS DE PING DE WINDOWS
 //-------------------------------------------------------------------------------------------------------
 
-	String getCommand(){
+	public String getCommand(){
 		
 		command = "ping -n 1 " + ip;
 		
 		return command;
 	}
 	
-	void doCommand(){
+	public void doCommand(){
 		
 		command = getCommand();
 		 try
 	        {
 	            Runtime r = Runtime.getRuntime();
 	            Process p = r.exec(command);
-	 
+	            notifyBeatObservers();
 	            // Inicializa el lector del buffer
 	            BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 	 
@@ -137,15 +138,16 @@ public class PingModel {
 	            	}
 	            	i++;
 	            }
+	            notifyBPMObservers();
 	            in.close();
 	        } catch (IOException e) {
 	            System.out.println(e);
 	        }
 	}
 	
-	void parsing(String line){
+	public void parsing(String line){
 		
-		String comienzo1 = "Respuesta desde"; //español
+		String comienzo1 = "Respuesta desde"; //espaï¿½ol
 		String beginning1 = "Reply from"; //ingles
 		String comienzo2 = "Tiempo de respuesta agotado";
 		String beginning2 = "Request timed out";
@@ -159,6 +161,12 @@ public class PingModel {
 			buffer2 = buffer1[1].split("=");
 			buffer3 = buffer2[2].split(" ");
 			tms = buffer3[0];
+			
+			String num = tms.substring(0, tms.length() - 2);
+			ping = Integer.parseInt(num);
+			
+			
+			
 			env++;
 			rec++;
 			pingMedio = promedio(tms);
@@ -175,11 +183,25 @@ public class PingModel {
 		}
 	}
 	
-	int promedio(String tMS){
+	public int promedio(String tMS){
 		String[] num = tMS.split("m");
 		int a =Integer.parseInt(num[0]);
 		suma= suma+a;
 
 		return suma/rec;
 	}
+
+	@Override
+	public void removeObserver(BeatObserver o) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeObserver(BPMObserver o) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 }

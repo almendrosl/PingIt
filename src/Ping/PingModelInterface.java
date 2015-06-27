@@ -21,12 +21,14 @@ public interface PingModelInterface {
 
 	void removeObserver(BPMObserver o);
 	
-	void getCommand();
+	public String getCommand();
 	
 	void doCommand();
 	
 	void parsing(String line);
 	
 	int promedio(String tms);
+	
+	void setFrec(int frec);
 	
 }
