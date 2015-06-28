@@ -35,31 +35,30 @@ public class DJView implements ActionListener,  BeatObserver, BPMObserver {
     JMenuItem startMenuItem;
     JMenuItem stopMenuItem;
 
-    private static DJView uniqueInstance;
     
-    public static DJView getInstance() {
-		if(uniqueInstance == null) {
-			
-			uniqueInstance = new DJView();
-		}
-		return uniqueInstance;
-	}
-    
-    
-    private DJView() {
+    public DJView() {
     	beatModel = new BeatModel();
-		beatController = new BeatController(model);
-		
-		model = beatModel;
-		controller = beatController;
+		beatController = new BeatController(beatModel, this);
 		
 		PingModel pingModel = new PingModel();
 		HeartModel heartModel1 = HeartModel.getInstance();
 		pingmodel = new PingAdapter(pingModel);
 		heartModel = new HeartAdapter(heartModel1);
-		pingController = new PingController(pingModel);
+		pingController = new PingController(pingModel,this);
 		heartController = new HeartController(heartModel1);
 		
+		model = pingmodel;
+    	
+		model.registerObserver((BeatObserver)this);
+		model.registerObserver((BPMObserver)this);
+		
+		model = heartModel;
+		
+		model.registerObserver((BeatObserver)this);
+		model.registerObserver((BPMObserver)this);
+		
+		model = beatModel;
+		controller = beatController;
 		
 		model.registerObserver((BeatObserver)this);
 		model.registerObserver((BPMObserver)this);
@@ -151,6 +150,8 @@ public class DJView implements ActionListener,  BeatObserver, BPMObserver {
         		controller = heartController;
             }
         });
+        
+        menuBar.add(menuModelos);
         controlFrame.setJMenuBar(menuBar);
 
         bpmTextField = new JTextField(2);

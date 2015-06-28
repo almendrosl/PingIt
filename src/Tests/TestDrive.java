@@ -12,7 +12,13 @@ import View.DJView;
 public class TestDrive {
 
 	public static void main(String[] args) {
-		DJView view = DJView.getInstance();
+		DJView view = new DJView();
+		view.createView();
+        view.createControls();
+		view.disableStopMenuItem();
+		view.enableStartMenuItem();
+		
+		
 	}
 
 }
