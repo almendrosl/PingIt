@@ -7,10 +7,18 @@ import javax.swing.*;
 
 import Beat.*;
 import ControllerInterface.ControllerInterface;
+import Heart.HeartAdapter;
+import Heart.HeartController;
+import Heart.HeartModel;
+import Heart.HeartModelInterface;
+import Ping.*;
 
 public class DJView implements ActionListener,  BeatObserver, BPMObserver {
-	BeatModelInterface model;
-	ControllerInterface controller;
+	BeatModelInterface model,beatModel;
+	ControllerInterface controller, beatController, pingController, heartController;
+	PingAdapter pingmodel;
+	HeartAdapter heartModel;
+	
     JFrame viewFrame;
     JPanel viewPanel;
 	BeatBar beatBar;
@@ -27,12 +35,37 @@ public class DJView implements ActionListener,  BeatObserver, BPMObserver {
     JMenuItem startMenuItem;
     JMenuItem stopMenuItem;
 
-    public DJView(ControllerInterface controller, BeatModelInterface model) {	
-		this.controller = controller;
-		this.model = model;
+    private static DJView uniqueInstance;
+    
+    public static DJView getInstance() {
+		if(uniqueInstance == null) {
+			
+			uniqueInstance = new DJView();
+		}
+		return uniqueInstance;
+	}
+    
+    
+    private DJView() {
+    	beatModel = new BeatModel();
+		beatController = new BeatController(model);
+		
+		model = beatModel;
+		controller = beatController;
+		
+		PingModel pingModel = new PingModel();
+		HeartModel heartModel1 = HeartModel.getInstance();
+		pingmodel = new PingAdapter(pingModel);
+		heartModel = new HeartAdapter(heartModel1);
+		pingController = new PingController(pingModel);
+		heartController = new HeartController(heartModel1);
+		
+		
 		model.registerObserver((BeatObserver)this);
 		model.registerObserver((BPMObserver)this);
     }
+    
+    
     
     public void createView() {
 		// Create all Swing components here
@@ -64,6 +97,8 @@ public class DJView implements ActionListener,  BeatObserver, BPMObserver {
 
         menuBar = new JMenuBar();
         menu = new JMenu("DJ Control");
+        
+        
         startMenuItem = new JMenuItem("Start");
         menu.add(startMenuItem);
         startMenuItem.addActionListener(new ActionListener() {
@@ -87,6 +122,35 @@ public class DJView implements ActionListener,  BeatObserver, BPMObserver {
 
         menu.add(exit);
         menuBar.add(menu);
+        
+        JMenu menuModelos = new JMenu("Modelos");
+        
+        JMenuItem beatMenuItem = new JMenuItem("Beat model");
+        menuModelos.add(beatMenuItem);
+        beatMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+            	model = beatModel;
+        		controller = beatController;
+            }
+        });
+        
+        JMenuItem pingMenuItem = new JMenuItem("Ping model");
+        menuModelos.add(pingMenuItem);
+        pingMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+            	model = pingmodel;
+        		controller = beatController;
+            }
+        });
+        
+        JMenuItem heartMenuItem = new JMenuItem("Heartbeat model");
+        menuModelos.add(heartMenuItem);
+        heartMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent event) {
+            	model = heartModel;
+        		controller = heartController;
+            }
+        });
         controlFrame.setJMenuBar(menuBar);
 
         bpmTextField = new JTextField(2);

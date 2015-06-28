@@ -9,7 +9,7 @@ public class PingController implements ControllerInterface {
   
 	public PingController(PingModelInterface model) {
 		this.model = model;
-		view = new DJView(this, new PingAdapter(model));
+		view = DJView.getInstance();
         view.createView();
         view.createControls();
 		view.disableStopMenuItem();

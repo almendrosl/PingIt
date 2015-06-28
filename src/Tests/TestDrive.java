@@ -7,16 +7,12 @@ import ControllerInterface.ControllerInterface;
 import Heart.HeartController;
 import Heart.HeartModel;
 import Ping.*;
+import View.DJView;
 
 public class TestDrive {
 
 	public static void main(String[] args) {
-		PingModelInterface pingmodel = new PingModel();
-		ControllerInterface pingcontroller = new PingController(pingmodel);
-		BeatModelInterface model = new BeatModel();
-		ControllerInterface controller = new BeatController(model);
-		HeartModel heartModel = HeartModel.getInstance();
-        ControllerInterface heart = new HeartController(heartModel);
+		DJView view = DJView.getInstance();
 	}
 
 }

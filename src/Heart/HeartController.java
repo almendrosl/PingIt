@@ -9,7 +9,7 @@ public class HeartController implements ControllerInterface {
   
 	public HeartController(HeartModelInterface model) {
 		this.model = model;
-		view = new DJView(this, new HeartAdapter(model));
+		view = DJView.getInstance();
         view.createView();
         view.createControls();
 		view.disableStopMenuItem();
