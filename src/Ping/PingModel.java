@@ -19,13 +19,13 @@ public class PingModel implements PingModelInterface{
 	String tms; //tiempo de respuesta
 	int ping, pingMedio;
 	int suma;
-	int frecDefecto = 1000;
-	int env, rec, per; // estados
+	int frec = 1000; //Frecuencia de la realizacion de pings por defecto cada 1000ms
+	int env, rec, per; // Estados
 	boolean noRespuesta;
 	boolean pingIncorrecto;
 	Timer time;
-	String ip = "www.google.com";
-	int frec = 0;
+	String ip = "www.google.com"; //Direccion ip/URL por defecto es la de google.com
+	
 	ArrayList beatObservers = new ArrayList();
 	ArrayList bpmObservers = new ArrayList();
 	
@@ -33,9 +33,6 @@ public class PingModel implements PingModelInterface{
 		
 	}
 
-//-------------------------------------------------------------------------------------------------------
-//FUNCIONES QUE CORRESPONDEN AL PUNTO 2
-//-------------------------------------------------------------------------------------------------------
 	
 	public void onCycle(){
 			env = 0;				//Cada ciclo nuevo estos valores se reinicializan
@@ -45,7 +42,7 @@ public class PingModel implements PingModelInterface{
 			env = 0;
 			pingIncorrecto = false;
 			noRespuesta = false;
-			time = new Timer(frecDefecto,new ActionListener(){
+			time = new Timer(frec,new ActionListener(){
 				public void actionPerformed (ActionEvent evn){
 					doCommand();
 				}
@@ -64,7 +61,7 @@ public class PingModel implements PingModelInterface{
 		return ping;
 	}
 	
-	//NOT SURE ABOUT THIS PART
+
 	public void registerObserver(BeatObserver o) {
 		beatObservers.add(o);
 	}
@@ -97,12 +94,6 @@ public class PingModel implements PingModelInterface{
 		return frec;
 	}
 	
-
-	
-//-------------------------------------------------------------------------------------------------------
-//FUNCIONES PARA LA NUEVA VISTA
-//-------------------------------------------------------------------------------------------------------
-
 	
 	public void setURL(String ip){
 		this.ip = ip;
@@ -143,7 +134,7 @@ public class PingModel implements PingModelInterface{
 	}
 	
 //-------------------------------------------------------------------------------------------------------
-//FUNCIONES NECESARIAS PARA REALIZAR LOS COMANDOS DE PING DE WINDOWS
+//METODOS NECESARIAS PARA REALIZAR LOS COMANDOS DE PING DE WINDOWS
 //-------------------------------------------------------------------------------------------------------
 
 	public String getCommand(){

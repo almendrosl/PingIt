@@ -30,15 +30,15 @@ public class PingController implements ControllerInterface {
     
 	public void increaseBPM() {
         int frec = model.getFrec();
-        model.setFrec(frec + 100);
+        model.setFrec(frec + 1000);
 	}
     
 	public void decreaseBPM() {
         int frec = model.getFrec();
-        model.setFrec(frec - 100);
+        model.setFrec(frec - 1000);
   	}
   
  	public void setBPM(int bpm) {
-		model.setFrec(bpm);
+		model.setFrec(bpm*1000);
 	}
 }
