@@ -33,6 +33,16 @@ public interface PingModelInterface {
 	
 	int getFrec();
 	
+	public String getURL();
+	
+	public int getEnviados();
+	
+	public int getRecibidos();
+	
+	public int getPerdidos();
+	
+	public int getPingMedio();
 	String getPing2();
+	
 	
 }

@@ -1,15 +1,15 @@
 package Heart;
 
-import View.DJView;
+import View.PingView;
 import ControllerInterface.ControllerInterface;
   
 public class HeartController implements ControllerInterface {
 	HeartModelInterface model;
-	DJView view;
+	PingView view;
   
 	public HeartController(HeartModelInterface model) {
 		this.model = model;
-		view = new DJView(this, new HeartAdapter(model));
+		view = new PingView(this, new HeartAdapter(model));
         view.createView();
         view.createControls();
 		view.disableStopMenuItem();

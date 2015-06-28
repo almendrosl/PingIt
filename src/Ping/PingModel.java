@@ -19,13 +19,12 @@ public class PingModel implements PingModelInterface{
 	String tms; //tiempo de respuesta
 	int ping, pingMedio;
 	int suma;
-	int frecDefecto = 1000;
+	int frec = 1000;
 	int env, rec, per; // estados
 	boolean noRespuesta;
 	boolean pingIncorrecto;
 	Timer time;
 	String ip = "www.google.com";
-	int frec = 0;
 	ArrayList beatObservers = new ArrayList();
 	ArrayList bpmObservers = new ArrayList();
 	
@@ -45,7 +44,7 @@ public class PingModel implements PingModelInterface{
 			env = 0;
 			pingIncorrecto = false;
 			noRespuesta = false;
-			time = new Timer(frecDefecto,new ActionListener(){
+			time = new Timer(frec,new ActionListener(){
 				public void actionPerformed (ActionEvent evn){
 					doCommand();
 				}
@@ -64,7 +63,7 @@ public class PingModel implements PingModelInterface{
 		return ping;
 	}
 	
-	//NOT SURE ABOUT THIS PART
+	
 	public void registerObserver(BeatObserver o) {
 		beatObservers.add(o);
 	}
@@ -106,7 +105,8 @@ public class PingModel implements PingModelInterface{
 	
 	public void setURL(String ip){
 		this.ip = ip;
-		this.frec = frec;
+		//this.frec = frec;
+		//time.setDelay(frec);
 		doCommand();
 	}
 	
@@ -139,7 +139,7 @@ public class PingModel implements PingModelInterface{
 		}
 		
 		else
-			return tms;
+			return "Ping: " + tms;
 	}
 	
 //-------------------------------------------------------------------------------------------------------
@@ -187,6 +187,7 @@ public class PingModel implements PingModelInterface{
 		String beginning1 = "Reply from"; //ingles
 		String comienzo2 = "Tiempo de respuesta agotado";
 		String beginning2 = "Request timed out";
+		String comienzo3 = "La solicitud";
 		
 		String[] buffer1;
 		String[] buffer2;
@@ -214,7 +215,7 @@ public class PingModel implements PingModelInterface{
 			noRespuesta = true;
 		}
 		
-		else{
+		if(line.startsWith(comienzo3)){
 			pingIncorrecto = true;
 		}
 	}

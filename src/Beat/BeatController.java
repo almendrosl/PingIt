@@ -1,15 +1,15 @@
 package Beat;
 
-import View.DJView;
+import View.PingView;
 import ControllerInterface.ControllerInterface;
   
 public class BeatController implements ControllerInterface {
 	BeatModelInterface model;
-	DJView view;
+	PingView view;
    
 	public BeatController(BeatModelInterface model) {
 		this.model = model;
-		view = new DJView(this, model);
+		view = new PingView(this, model);
         view.createView();
         view.createControls();
 		view.disableStopMenuItem();

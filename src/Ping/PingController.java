@@ -1,15 +1,15 @@
 package Ping;
 
-import View.DJView;
+import View.PingView;
 import ControllerInterface.ControllerInterface;
   
 public class PingController implements ControllerInterface {
 	PingModelInterface model;
-	DJView view;
+	PingView view;
   
 	public PingController(PingModelInterface model) {
 		this.model = model;
-		view = new DJView(this, new PingAdapter(model));
+		view = new PingView(this, model);
         view.createView();
         view.createControls();
 		view.disableStopMenuItem();
@@ -30,15 +30,16 @@ public class PingController implements ControllerInterface {
     
 	public void increaseBPM() {
         int frec = model.getFrec();
-        model.setFrec(frec + 100);
+        model.setFrec(frec + 1000);
 	}
     
 	public void decreaseBPM() {
         int frec = model.getFrec();
-        model.setFrec(frec - 100);
+        model.setFrec(frec - 1000);
   	}
   
- 	public void setBPM(int bpm) {
-		model.setFrec(bpm);
+ 	public void setBPM(int pingSeg, String ip) {
+		model.setFrec(pingSeg*1000);
+		model.setURL(ip);
 	}
 }
