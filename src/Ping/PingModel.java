@@ -47,6 +47,7 @@ public class PingModel implements PingModelInterface{
 			time = new Timer(frec,new ActionListener(){
 				public void actionPerformed (ActionEvent evn){
 					doCommand();
+					time.setDelay(frec);
 				}
 			});
 			if (frec != 0){
@@ -88,7 +89,7 @@ public class PingModel implements PingModelInterface{
 	
 	public void setFrec(int frec){
 		this.frec = frec;
-		time.setDelay(frec);
+		
 		doCommand();
 	}
 	
